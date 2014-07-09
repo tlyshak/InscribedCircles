@@ -1,0 +1,159 @@
+﻿<Window x:Class="WpfShell.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:WpfShell.Converters"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Title="Розрахунок вписаних кіл" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converters:CurrentHeightToScaledHeightConverter x:Key="ActualWidthToScaledHeightConverter"/>
+        <converters:CoordinatesToScalableCoordinatesMultiConverter x:Key="CoordinatesToScalableCoordinatesMultiConverter"/>
+        <converters:SizeToScalableSizeMultiConverter x:Key="SizeToScalableSizeMultiConverter"/>
+        <converters:WidthToScaledWidthMultiConverter x:Key="WidthToScaledWidthMultiConverter"/>
+        <Style x:Key="VerticalSeparatorStyle" 
+       TargetType="{x:Type Separator}"
+       BasedOn="{StaticResource {x:Type Separator}}">
+            <Setter Property="Margin" Value="6,0,6,0"/>
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <TransformCollection>
+                                <RotateTransform Angle="90"/>
+                            </TransformCollection>
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition x:Name="GuiColumnDefinition" Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <telerik:RadMenu Grid.ColumnSpan="3" ItemsSource="{Binding MenuItems}"/>
+        <GroupBox Grid.Row="1" Grid.Column="0" Margin="5" x:Name="GroupBox">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold">Параметри</TextBlock>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Margin="1">Радіус кола</TextBlock>
+                <telerik:RadNumericUpDown x:Name="CircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding CircleRadius, Mode=TwoWay}"/>
+                
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="1">Ширина заготовки (X)</TextBlock>
+                <telerik:RadNumericUpDown x:Name="RectWidthUpDown" Grid.Column="1" Grid.Row="1"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleWidth, Mode=TwoWay}"/>
+                
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="2">Висота заготовки (Y)</TextBlock>
+                <telerik:RadNumericUpDown x:Name="RectHeightUpDown" Grid.Column="1" Grid.Row="2" 
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleHeight, Mode=TwoWay}"/>
+                
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="3">Мінімальний проміжок</TextBlock>
+                <telerik:RadNumericUpDown x:Name="MinGapUpDown" Grid.Column="1" Grid.Row="3"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding MinimalGap, Mode=TwoWay}"/>
+
+                <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                   Grid.ColumnSpan="2" Grid.Row="4" Content="Обрахувати" Command="{Binding CalcCirclesCommand}"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold">Результати</TextBlock>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1">Кількість вписаних кіл:</TextBlock>
+                <TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding Circles.Count}"></TextBlock>
+            </Grid>
+        </GroupBox>
+        <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
+        <ItemsControl x:Name="ItemsControl" 
+                      Margin="5" ItemsSource="{Binding Circles}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"
+                      BorderBrush="Black" BorderThickness="1">
+            <ItemsControl.Height>
+                <MultiBinding Converter="{StaticResource WidthToScaledWidthMultiConverter}">
+                    <Binding ElementName="ItemsControl" Path="ActualWidth"></Binding>
+                    <Binding Path="Circles"></Binding>
+                </MultiBinding>
+            </ItemsControl.Height>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent"
+                            Width="{Binding ElementName=ItemsControl, Path=ActualWidth}" 
+                            Height="{Binding ElementName=ItemsControl, Path=ActualHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse x:Name="EllipseControl">
+                        <Ellipse.Width>
+                            <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
+                                <Binding Path="Ellipse.Width"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Ellipse.Width>
+                        <Ellipse.Height>
+                            <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
+                                <Binding Path="Ellipse.Height"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Ellipse.Height>
+                        <Ellipse.Fill>
+                            <Binding Path="Ellipse.Fill"></Binding>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
+                                <Binding Path="Y"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
+                                <Binding Path="X"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </Grid>
+</Window>
