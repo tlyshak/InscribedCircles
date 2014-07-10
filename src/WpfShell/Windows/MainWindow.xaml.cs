@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using WpfShell.Attributes;
-using WpfShell.ViewModel;
+using WpfShell.ViewModels;
 
 namespace WpfShell.Windows
 {

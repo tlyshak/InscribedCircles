@@ -25,6 +25,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style
+    x:Key="LinkButton"
+    TargetType="Button">
+            <Setter
+        Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                TargetType="Button">
+                        <TextBlock
+                    TextDecorations="Underline">
+                <ContentPresenter /></TextBlock>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter
+        Property="Foreground"
+        Value="Blue" />
+            <Style.Triggers>
+                <Trigger
+            Property="IsMouseOver"
+            Value="true">
+                    <Setter
+                Property="Foreground"
+                Value="Red" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -94,6 +121,8 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Margin="1">Кількість вписаних кіл:</TextBlock>
                 <TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding Circles.Count}"></TextBlock>
+                <telerik:RadButton Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
+                                   Command="{Binding ShowCoordinatesCommand}"></telerik:RadButton>
             </Grid>
         </GroupBox>
         <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>

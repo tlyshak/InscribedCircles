@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using WpfShell.ViewModel;
+using WpfShell.ViewModels;
 
 namespace WpfShell.Converters
 {

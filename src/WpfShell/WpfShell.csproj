@@ -43,6 +43,16 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -59,11 +69,17 @@
     <Reference Include="Telerik.Windows.Controls">
       <HintPath>..\lib\Telerik\Telerik.Windows.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView">
+      <HintPath>C:\Users\tlyshak\Desktop\CirclesInRectangle\lib\Telerik\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Controls.Input">
       <HintPath>..\lib\Telerik\Telerik.Windows.Controls.Input.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.Navigation">
       <HintPath>..\lib\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data">
+      <HintPath>C:\Users\tlyshak\Desktop\CirclesInRectangle\lib\Telerik\Telerik.Windows.Data.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -79,8 +95,10 @@
     <Compile Include="Converters\CoordinatesToScalableCoordinatesMultiConverter.cs" />
     <Compile Include="Converters\SizeToScalableSizeMultiConverter.cs" />
     <Compile Include="Converters\WidthToScaledWidthMultiConverter.cs" />
+    <Compile Include="Models\ContainerAccessor.cs" />
     <Compile Include="Models\CustomEllipse.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModels\CoordinatesCirclesViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="Windows\CoordinatesCirclesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

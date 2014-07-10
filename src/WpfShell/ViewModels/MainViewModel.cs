@@ -6,17 +6,21 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using CirclesInRectangle;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Practices.Unity;
 using Telerik.Windows.Controls;
 using WpfShell.Models;
+using WpfShell.Windows;
+using Point = CirclesInRectangle.Point;
 using ViewModelBase = GalaSoft.MvvmLight.ViewModelBase;
 
-namespace WpfShell.ViewModel
+namespace WpfShell.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
         #region Fields
         private ObservableCollection<CustomEllipse> _circles;
         private ICommand _calcCirclesCommand;
+        private ICommand _showCoordinatesCommand;
         private double _circleRadius;
         private double _rectangleWidth;
         private double _rectangleHeight;
@@ -96,7 +100,12 @@ namespace WpfShell.ViewModel
         public ICommand CalcCirclesCommand
         {
             get { return _calcCirclesCommand ?? (_calcCirclesCommand = new RelayCommand(CalcCircles)); }
-        } 
+        }
+        public ICommand ShowCoordinatesCommand
+        {
+            get { return _showCoordinatesCommand ?? (_calcCirclesCommand = new RelayCommand(ShowCoordinates)); }
+        }
+
         #endregion
 
         #region Constructor
@@ -111,6 +120,9 @@ namespace WpfShell.ViewModel
         #region Private Methods
         private void CalcCircles()
         {
+            var unityContainer = new UnityContainer();
+            ContainerAccessor.Container = unityContainer;
+
             StaticData.DefinedWidth = RectangleWidth;
             StaticData.DefinedHeight = RectangleHeight;
 
@@ -137,6 +149,13 @@ namespace WpfShell.ViewModel
                     Y = point.CenterY - CircleRadius
                 });
             }
+            unityContainer.RegisterInstance(points);
+        }
+
+        private void ShowCoordinates()
+        {
+            var coordinatesWindow = new CoordinatesCirclesWindow();
+            coordinatesWindow.ShowDialog();
         }
 
         private bool ValidateValues()

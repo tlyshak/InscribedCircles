@@ -39,7 +39,7 @@ namespace CirclesInRectangle
 
         private Point GetNewCircleCenter(double currentHeight, double circleRadius, double gap, bool isPairedRow)
         {
-            double centerY = currentHeight + (circleRadius/2) + (2/Math.Sqrt(3)*circleRadius) + gap;
+            double centerY = currentHeight + 1.5*(2/Math.Sqrt(3)*circleRadius) + gap;
             double centerX = isPairedRow ? gap : (1.5*gap + circleRadius);
             return (centerY + circleRadius) <= _height ? new Point(centerX, centerY) : null;
         }
