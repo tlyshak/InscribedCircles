@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio 12.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="12.0">
+ <Targets>
+  <Target Name="C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Debug\Paraffin.exe">
+   <Modules>
+    <Module Name="paraffin.exe">
+     <Namespaces>
+      <Namespace Name="Wintellect.Paraffin">
+       <Types>
+        <Type Name="Program" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Members>
+          <Member Name="#InitializeArgumentsFromFile(System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" Status="Active" Created="2014-06-23 18:29:15Z" FixCategory="NonBreaking" BreaksBuild="True">
+             <Issue Certainty="90" Level="Warning" Path="c:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin" File="Main.Update.cs" Line="633">'Program.InitializeArgumentsFromFile(string)' has a cyclomatic complexity of 26. Rewrite or refactor the method to reduce complexity to 25.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="AvoidExcessiveComplexity" Category="Microsoft.Maintainability" CheckId="CA1502" BreaksBuild="True">
+   <Name>Avoid excessive complexity</Name>
+   <Description>Method implementations that are exceedingly complex increase the challenge of understanding and maintaining code.</Description>
+   <Resolution Name="Default">{0} has a cyclomatic complexity of {1}. Rewrite or refactor the method to reduce complexity to {2}.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182212.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="90">Warning</MessageLevel>
+   <File Name="maintainabilityrules.dll" Version="12.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Category</String>
+  <String Key="Certainty">Certainty</String>
+  <String Key="CollapseAll">Collapse All</String>
+  <String Key="CheckId">Check Id</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">error(s)</String>
+  <String Key="ExpandAll">Expand All</String>
+  <String Key="Help">Help</String>
+  <String Key="Line">Line</String>
+  <String Key="Messages">message(s)</String>
+  <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+  <String Key="Project">Project</String>
+  <String Key="Resolution">Resolution</String>
+  <String Key="Rule">Rule</String>
+  <String Key="RuleFile">Rule File</String>
+  <String Key="RuleDescription">Rule Description</String>
+  <String Key="Source">Source</String>
+  <String Key="Status">Status</String>
+  <String Key="Target">Target</String>
+  <String Key="Warning">Warning</String>
+  <String Key="Warnings">warning(s)</String>
+  <String Key="ReportTitle">Code Analysis Report</String>
+ </Localized>
+ <Exceptions>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect1000' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2000' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2001' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2002' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2003' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2004' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2005' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect2007' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3000' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3001' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3002' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3003' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3004' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+  <Exception Keyword="CA0062" Kind="Engine" TreatAsWarning="True">
+   <Type>Microsoft.FxCop.Sdk.FxCopException</Type>
+   <ExceptionMessage>The rule 'Wintellect3005' referenced in rule set 'C:\Users\tlyshak\Downloads\Paraffin-master\Paraffin-master\Paraffin\ParaffinRuleSet.ruleset' could not be found.</ExceptionMessage>
+  </Exception>
+ </Exceptions>
+</FxCopReport>

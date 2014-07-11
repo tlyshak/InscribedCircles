@@ -5,6 +5,6 @@
         Title="Координати кіл" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
         <telerik:RadGridView ItemsSource="{Binding Points}" ShowColumnSortIndexes="False" ShowGroupPanel="False" 
-                             RowIndicatorVisibility="Collapsed" ColumnWidth="*"/>
+                             RowIndicatorVisibility="Collapsed" ColumnWidth="*" IsFilteringAllowed="False"/>
     </Grid>
 </Window>
