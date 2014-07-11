@@ -2,30 +2,87 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?include Variables.wxi?>
   <Product Id="$(var.ProductCode)" Name="$(var.ProductName)" Language="1033" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
+    <MajorUpgrade DowngradeErrorMessage="A newer version of $(var.ProductName) is already installed." />
+    <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="InstallLocation" Name="$(var.ProductName)"/>
+      </Directory>
+      <Directory Id="DesktopFolder" />
+    </Directory>
 
-		<Feature Id="ProductFeature" Title="Intaller" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
+    <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1">
+      <ComponentGroupRef Id="CLIENT_SOURCE" />
+      <Component Id="DesktopShortcut" Guid="BFFD9AA3-F82A-43DE-BDDD-34B82BE332C5" Directory="DesktopFolder">
+        <Condition>INSTALLDESKTOPSHORTCUT</Condition>
+        <Shortcut Id="ShortcutShell"
+              Name="$(var.ProductName)"
+              Icon="ProductIcon"
+              Description="$(var.ProductName)"
+              Target="[InstallLocation]WpfShell.exe"
+              WorkingDirectory="InstallLocation"/>
+      </Component>
+      <!--<Component Id="StartMenuShortcut" Guid="A0A54F4A-1498-45AA-B14B-5DC961F7A2F7" Directory="DesktopFolder">
+        <Shortcut Id="startMenuShortcut" Target="[InstallLocation]CWD.HCAP.Shell.exe"
+                      Name="$(var.ProductName)" WorkingDirectory="InstallLocation"
+                      Icon="ProductIcon"/>
+      </Component>-->
+    </Feature>
 
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Intaller" />
-			</Directory>
-		</Directory>
-	</Fragment>
+    <Property Id="WIXUI_INSTALLDIR" Value="InstallLocation"/>
+    <Property Id="INSTALLDESKTOPSHORTCUT" Value="1" />
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="MyWixUI_InstallDir" />
+
+    <Icon Id="ProductIcon" SourceFile="..\..\..\WpfShell\Resources\Images\logo.ico"/>
+  </Product>
+
+  <Fragment>
+    <UI>
+      <TextStyle Id="DlgTitleFont" FaceName="Tahoma" Size="9" Bold="yes" />
+      <Dialog Id="MyInstallDirDlg" Width="370" Height="270" Title="Інсталяція програми [ProductName]" NoMinimize="no">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>Для інсталяції в папку за промовчанням натисніть кнопку "Далі"; щоб вибрати іншу папку, натисніть кнопку "Змінити".</Text>
+        </Control>
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>{\DlgTitleFont}Папка призначення</Text>
+        </Control>
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+        <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="30" Text="Папка для інсталяції програми [ProductName]:" />
+        <Control Id="Folder" Type="PathEdit" X="20" Y="100" Width="320" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
+        <Control Id="ChangeFolder" Type="PushButton" X="20" Y="120" Width="56" Height="17" Text="Змінити..." Default="yes" />
+        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="20" Y="160" Width="290" Height="17" Property="INSTALLDESKTOPSHORTCUT" CheckBoxValue="1" Text="Створити ярлик для цієї програми на робочому столі" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Назад" />
+        <Control Id="Next" Default="yes" Type="PushButton" X="236" Y="243" Width="56" Height="17" Text="Далі" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="Скасувати">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+  </Fragment>
+
+  <Fragment>
+    <UI Id="MyWixUI_InstallDir">
+      <!--<Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>-->
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="MyInstallDirDlg">LicenseAccepted = "1"</Publish>
+
+      <Publish Dialog="MyInstallDirDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="MyInstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MyInstallDirDlg" Order="1">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed</Publish>
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+  </Fragment>
 </Wix>

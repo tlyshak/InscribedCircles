@@ -126,65 +126,63 @@
             </Grid>
         </GroupBox>
         <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
-        <telerik:RadBusyIndicator Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" IsBusy="{Binding IsBusy}">
-            <ItemsControl x:Name="ItemsControl" 
+        <ItemsControl  Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" x:Name="ItemsControl" 
                       Margin="5" ItemsSource="{Binding Circles}"
                       BorderBrush="Black" BorderThickness="1">
-                <ItemsControl.Height>
-                    <MultiBinding Converter="{StaticResource WidthToScaledWidthMultiConverter}">
-                        <Binding ElementName="ItemsControl" Path="ActualWidth"></Binding>
-                        <Binding Path="Circles"></Binding>
-                    </MultiBinding>
-                </ItemsControl.Height>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent"
+            <ItemsControl.Height>
+                <MultiBinding Converter="{StaticResource WidthToScaledWidthMultiConverter}">
+                    <Binding ElementName="ItemsControl" Path="ActualWidth"></Binding>
+                    <Binding Path="Circles"></Binding>
+                </MultiBinding>
+            </ItemsControl.Height>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent"
                             Width="{Binding ElementName=ItemsControl, Path=ActualWidth}" 
                             Height="{Binding ElementName=ItemsControl, Path=ActualHeight}"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Ellipse x:Name="EllipseControl" Fill="DarkGray">
-                            <Ellipse.Width>
-                                <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
-                                    <Binding Path="Ellipse.Width"></Binding>
-                                    <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
-                                </MultiBinding>
-                            </Ellipse.Width>
-                            <Ellipse.Height>
-                                <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
-                                    <Binding Path="Ellipse.Height"></Binding>
-                                    <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
-                                </MultiBinding>
-                            </Ellipse.Height>
-                            <!--<Ellipse.Fill>
-                                <Binding Path="Ellipse.Fill"></Binding>
-                            </Ellipse.Fill>-->
-                        </Ellipse>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Top">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
-                                    <Binding Path="Y"></Binding>
-                                    <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Canvas.Left">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
-                                    <Binding Path="X"></Binding>
-                                    <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ItemsControl>
-        </telerik:RadBusyIndicator>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse x:Name="EllipseControl">
+                        <Ellipse.Width>
+                            <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
+                                <Binding Path="Diameter"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Ellipse.Width>
+                        <Ellipse.Height>
+                            <MultiBinding Converter="{StaticResource SizeToScalableSizeMultiConverter}">
+                                <Binding Path="Diameter"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Ellipse.Height>
+                        <Ellipse.Fill>
+                            <Binding Path="ColorBrush"></Binding>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
+                                <Binding Path="Y"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Canvas.Left">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource CoordinatesToScalableCoordinatesMultiConverter}">
+                                <Binding Path="X"></Binding>
+                                <Binding Path="ActualWidth" ElementName="ItemsControl"></Binding>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
     </Grid>
 </Window>

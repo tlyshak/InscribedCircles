@@ -3,14 +3,12 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using CirclesInRectangle;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.Unity;
 using Telerik.Windows.Controls;
 using WpfShell.Models;
 using WpfShell.Windows;
-using Point = CirclesInRectangle.Point;
 using ViewModelBase = GalaSoft.MvvmLight.ViewModelBase;
 
 namespace WpfShell.ViewModels
@@ -18,7 +16,7 @@ namespace WpfShell.ViewModels
     public class MainViewModel : ViewModelBase
     {
         #region Fields
-        private ObservableCollection<CustomEllipse> _circles;
+        private ObservableCollection<Circle> _circles;
         private ICommand _calcCirclesCommand;
         private ICommand _showCoordinatesCommand;
         private double _circleRadius;
@@ -26,11 +24,25 @@ namespace WpfShell.ViewModels
         private double _rectangleHeight;
         private double _minimalGap;
         private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
+        private readonly UnityContainer _unityContainer;
+        private bool _isBusy;
 
         #endregion
 
         #region Properties
-        public ObservableCollection<CustomEllipse> Circles
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if(Equals(_isBusy, value)) return;
+                _isBusy = value;
+                RaisePropertyChanged(() => IsBusy);
+            }
+        }
+
+        public ObservableCollection<Circle> Circles
         {
             get { return _circles; }
             set
@@ -111,6 +123,7 @@ namespace WpfShell.ViewModels
         #region Constructor
         public MainViewModel()
         {
+            _unityContainer = new UnityContainer();
             var radMenuItem = new RadMenuItem {Header = "Файл"};
             radMenuItem.Items.Add(new RadMenuItem {Header = "Вихід", Command = new RelayCommand(() => Application.Current.Shutdown())});
             MenuItems.Add(radMenuItem);
@@ -120,8 +133,7 @@ namespace WpfShell.ViewModels
         #region Private Methods
         private void CalcCircles()
         {
-            var unityContainer = new UnityContainer();
-            ContainerAccessor.Container = unityContainer;
+            ContainerAccessor.Container = _unityContainer;
 
             StaticData.DefinedWidth = RectangleWidth;
             StaticData.DefinedHeight = RectangleHeight;
@@ -130,26 +142,23 @@ namespace WpfShell.ViewModels
             if (hasErrors) return;
 
             var random = new Random();
-            Circles = new ObservableCollection<CustomEllipse>();
+            Circles = new ObservableCollection<Circle>();
 
             var rectangleWithCircles = new RectangleWithCircles(RectangleWidth, RectangleHeight);
             var points = rectangleWithCircles.GetHexagonsCountFromRectangle(CircleRadius, MinimalGap);
             foreach (var point in points)
             {
-                Circles.Add(new CustomEllipse(new Ellipse
-                {
-                    Width = CircleRadius * 2, // is diameter
-                    Height = CircleRadius * 2, // is diameter
-                    Fill =
-                        new SolidColorBrush(Color.FromRgb((byte)random.Next(100, 200), (byte)random.Next(100, 200),
-                            (byte)random.Next(100, 200))) //random color
-                })
+                Circles.Add(new Circle
                 {
                     X = point.CenterX - CircleRadius,
-                    Y = point.CenterY - CircleRadius
+                    Y = point.CenterY - CircleRadius,
+                    Diameter = CircleRadius*2,
+                    ColorBrush =
+                        new SolidColorBrush(Color.FromRgb((byte) random.Next(100, 200), (byte) random.Next(100, 200),
+                            (byte) random.Next(100, 200)))
                 });
             }
-            unityContainer.RegisterInstance(points);
+            _unityContainer.RegisterInstance(points);
         }
 
         private void ShowCoordinates()

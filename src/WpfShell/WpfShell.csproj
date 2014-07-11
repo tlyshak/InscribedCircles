@@ -96,7 +96,7 @@
     <Compile Include="Converters\SizeToScalableSizeMultiConverter.cs" />
     <Compile Include="Converters\WidthToScaledWidthMultiConverter.cs" />
     <Compile Include="Models\ContainerAccessor.cs" />
-    <Compile Include="Models\CustomEllipse.cs" />
+    <Compile Include="Models\Circle.cs" />
     <Compile Include="ViewModels\CoordinatesCirclesViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="Windows\CoordinatesCirclesWindow.xaml">
@@ -152,6 +152,9 @@
       <Project>{6FC7B5EC-CEB0-4BC1-B8BF-2929A5F18247}</Project>
       <Name>CirclesInRectangle</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
