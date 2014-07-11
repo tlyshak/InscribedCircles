@@ -16,7 +16,7 @@ namespace InscribedCircles.MainApp.ViewModels
     public class MainViewModel : ViewModel
     {
         #region Fields
-        private ObservableCollection<Circle> _circles;
+        private ObservableCollection<Circle> _circles = new ObservableCollection<Circle>();
         private ICommand _calcCirclesCommand;
         private ICommand _showCoordinatesCommand;
         private double _circleRadius;
@@ -114,7 +114,7 @@ namespace InscribedCircles.MainApp.ViewModels
         }
         public ICommand ShowCoordinatesCommand
         {
-            get { return _showCoordinatesCommand ?? (_calcCirclesCommand = new RelayCommand(ShowCoordinates)); }
+            get { return _showCoordinatesCommand ?? (_showCoordinatesCommand = new RelayCommand(ShowCoordinates)); }
         }
 
         #endregion
@@ -137,11 +137,10 @@ namespace InscribedCircles.MainApp.ViewModels
             var hasErrors = ValidateValues();
             if (hasErrors) return;
 
-            var random = new Random();
             Circles = new ObservableCollection<Circle>();
-
-            var rectangleWithCircles = new RectangleWithCircles(RectangleWidth, RectangleHeight);
-            var points = rectangleWithCircles.GetHexagonsCountFromRectangle(CircleRadius, MinimalGap);
+            var rectangleWithCircles = new InscribedCirclesService();
+            var points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
+            var random = new Random();
             foreach (var point in points)
             {
                 Circles.Add(new Circle
@@ -165,9 +164,9 @@ namespace InscribedCircles.MainApp.ViewModels
 
         private bool ValidateValues()
         {
-            var errorMessage = (RectangleWidth == 0 ? "Ширина заготовки\n" : string.Empty) +
-                               (RectangleHeight == 0 ? "Висота заготовки\n" : string.Empty) +
-                               (CircleRadius == 0 ? "Радіус кола\n" : string.Empty);
+            var errorMessage = (RectangleWidth <= 0 ? "Ширина заготовки\n" : string.Empty) +
+                               (RectangleHeight <= 0 ? "Висота заготовки\n" : string.Empty) +
+                               (CircleRadius <= 0 ? "Радіус кола\n" : string.Empty);
             if (errorMessage == string.Empty) return false;
             MessageBox.Show(errorMessage + "\nНе може(можуть) бути 0", "Помилка вводу");
             return true;

@@ -21,19 +21,19 @@
               Name="$(var.ProductName)"
               Icon="ProductIcon"
               Description="$(var.ProductName)"
-              Target="[InstallLocation]InscribedCircles.MainApp"
+              Target="[InstallLocation]InscribedCircles.MainApp.exe"
               WorkingDirectory="InstallLocation"/>
       </Component>
-      <!--<Component Id="StartMenuShortcut" Guid="A0A54F4A-1498-45AA-B14B-5DC961F7A2F7" Directory="DesktopFolder">
-        <Shortcut Id="startMenuShortcut" Target="[InstallLocation]CWD.HCAP.Shell.exe"
-                      Name="$(var.ProductName)" WorkingDirectory="InstallLocation"
-                      Icon="ProductIcon"/>
-      </Component>-->
     </Feature>
 
     <Property Id="WIXUI_INSTALLDIR" Value="InstallLocation"/>
     <Property Id="INSTALLDESKTOPSHORTCUT" Value="1" />
     <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+    <!--<PropertyRef Id="NETFRAMEWORK45"/>-->
+
+    <!--<Condition Message="Ця програма потребує .NET Framework 4.5. Будь-ласка встановіть .NET Framework, тоді запустіть цей інсталятор знову.">
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>-->
 
     <UIRef Id="WixUI_InstallDir" />
     <UIRef Id="MyWixUI_InstallDir" />

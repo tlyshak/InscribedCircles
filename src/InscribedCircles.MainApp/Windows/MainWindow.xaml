@@ -9,9 +9,8 @@
         <converters:CoordinatesToScalableCoordinatesMultiConverter x:Key="CoordinatesToScalableCoordinatesMultiConverter"/>
         <converters:SizeToScalableSizeMultiConverter x:Key="SizeToScalableSizeMultiConverter"/>
         <converters:WidthToScaledWidthMultiConverter x:Key="WidthToScaledWidthMultiConverter"/>
-        <Style x:Key="VerticalSeparatorStyle" 
-       TargetType="{x:Type Separator}"
-       BasedOn="{StaticResource {x:Type Separator}}">
+        <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+        <Style x:Key="VerticalSeparatorStyle"  TargetType="{x:Type Separator}" BasedOn="{StaticResource {x:Type Separator}}">
             <Setter Property="Margin" Value="6,0,6,0"/>
             <Setter Property="LayoutTransform">
                 <Setter.Value>
@@ -25,30 +24,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style
-    x:Key="LinkButton"
-    TargetType="Button">
-            <Setter
-        Property="Template">
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate
-                TargetType="Button">
-                        <TextBlock
-                    TextDecorations="Underline">
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock TextDecorations="Underline">
                 <ContentPresenter /></TextBlock>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter
-        Property="Foreground"
-        Value="Blue" />
+            <Setter Property="Foreground" Value="Blue" />
             <Style.Triggers>
-                <Trigger
-            Property="IsMouseOver"
-            Value="true">
-                    <Setter
-                Property="Foreground"
-                Value="Red" />
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Foreground" Value="Red" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -88,11 +76,11 @@
                 <telerik:RadNumericUpDown x:Name="CircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding CircleRadius, Mode=TwoWay}"/>
                 
-                <TextBlock Margin="1" Grid.Column="0" Grid.Row="1">Ширина заготовки (X)</TextBlock>
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="1">Ширина заготовки</TextBlock>
                 <telerik:RadNumericUpDown x:Name="RectWidthUpDown" Grid.Column="1" Grid.Row="1"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleWidth, Mode=TwoWay}"/>
                 
-                <TextBlock Margin="1" Grid.Column="0" Grid.Row="2">Висота заготовки (Y)</TextBlock>
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="2">Висота заготовки</TextBlock>
                 <telerik:RadNumericUpDown x:Name="RectHeightUpDown" Grid.Column="1" Grid.Row="2" 
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleHeight, Mode=TwoWay}"/>
                 
@@ -121,7 +109,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Margin="1">Кількість вписаних кіл:</TextBlock>
                 <TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding Circles.Count}"></TextBlock>
-                <telerik:RadButton Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
+                <telerik:RadButton Visibility="{Binding Circles.Count, Converter={StaticResource IntToVisibilityConverter}}" Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
                                    Command="{Binding ShowCoordinatesCommand}"></telerik:RadButton>
             </Grid>
         </GroupBox>
