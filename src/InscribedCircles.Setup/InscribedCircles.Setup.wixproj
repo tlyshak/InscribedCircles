@@ -6,11 +6,11 @@
     <ProductVersion>3.8</ProductVersion>
     <ProjectGuid>8457937c-2e5f-41ee-a6be-10db5d6fdaa2</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>InscribedCircles.Intaller</OutputName>
+    <OutputName>InscribedCircles.Setup</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-    <Name>InscribedCircles.Intaller</Name>
+    <Name>InscribedCircles.Setup</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -48,7 +48,7 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WpfShell\InscribedCircles.MainApp.csproj">
+    <ProjectReference Include="..\InscribedCircles.MainApp\InscribedCircles.MainApp.csproj">
       <Name>InscribedCircles.MainApp</Name>
       <Project>{a9448e33-6110-4500-878d-ff4c2c37d6f8}</Project>
       <Private>True</Private>

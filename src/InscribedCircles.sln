@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InscribedCircles.Core", "In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InscribedCircles.MainApp", "InscribedCircles.MainApp\InscribedCircles.MainApp.csproj", "{A9448E33-6110-4500-878D-FF4C2C37D6F8}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "InscribedCircles.Intaller", "InscribedCircles.Intaller\InscribedCircles.Intaller.wixproj", "{8457937C-2E5F-41EE-A6BE-10DB5D6FDAA2}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "InscribedCircles.Setup", "InscribedCircles.Setup\InscribedCircles.Setup.wixproj", "{8457937C-2E5F-41EE-A6BE-10DB5D6FDAA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InscribedCircles.Abstraction", "InscribedCircles.Abstraction\InscribedCircles.Abstraction.csproj", "{4436D0E1-A013-4969-8232-0F756A31C9C7}"
 EndProject
