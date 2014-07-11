@@ -41,7 +41,7 @@ namespace CirclesInRectangle
         {
             double centerY = currentHeight + 1.5*(2/Math.Sqrt(3)*circleRadius) + gap;
             double centerX = isPairedRow ? gap : (1.5*gap + circleRadius);
-            return (centerY + circleRadius) <= _height ? new Point(centerX, centerY) : null;
+            return (centerY + circleRadius + gap) <= _height ? new Point(centerX, centerY) : null;
         }
     }
 }
