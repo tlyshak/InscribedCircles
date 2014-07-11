@@ -67,19 +67,19 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Telerik.Windows.Controls">
-      <HintPath>..\lib\Telerik\Telerik.Windows.Controls.dll</HintPath>
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.GridView">
-      <HintPath>C:\Users\tlyshak\Desktop\CirclesInRectangle\lib\Telerik\Telerik.Windows.Controls.GridView.dll</HintPath>
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Controls.GridView.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.Input">
-      <HintPath>..\lib\Telerik\Telerik.Windows.Controls.Input.dll</HintPath>
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Controls.Input.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.Navigation">
-      <HintPath>..\lib\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Data">
-      <HintPath>C:\Users\tlyshak\Desktop\CirclesInRectangle\lib\Telerik\Telerik.Windows.Data.dll</HintPath>
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Data.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

@@ -4,7 +4,9 @@
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="Координати кіл" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
-        <telerik:RadGridView ItemsSource="{Binding Points}" ShowColumnSortIndexes="False" ShowGroupPanel="False" 
+        <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}">
+            <telerik:RadGridView ItemsSource="{Binding Points}" ShowColumnSortIndexes="False" ShowGroupPanel="False" 
                              RowIndicatorVisibility="Collapsed" ColumnWidth="*"/>
+        </telerik:RadBusyIndicator>
     </Grid>
 </Window>
