@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Core;
-using InscribedCircles.MainApp.Models;
 using Microsoft.Practices.Unity;
 
 namespace InscribedCircles.MainApp.ViewModels
