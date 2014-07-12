@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Core;
 using InscribedCircles.MainApp.Models;
 using InscribedCircles.MainApp.Windows;
+using Microsoft.Expression.Interactivity.Layout;
 using Microsoft.Practices.Unity;
 using Telerik.Windows.Controls;
 
@@ -25,10 +28,22 @@ namespace InscribedCircles.MainApp.ViewModels
         private double _minimalGap;
         private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
         private bool _isBusy;
+        private Canvas _canvasControl = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
+        private ICommand _addOptionalCircleCommand;
 
         #endregion
 
         #region Properties
+
+        public Canvas CanvasControl
+        {
+            get { return _canvasControl; }
+            set
+            {
+                _canvasControl = value;
+                RaisePropertyChanged(() => CanvasControl);
+            }
+        }
 
         public bool IsBusy
         {
@@ -108,6 +123,12 @@ namespace InscribedCircles.MainApp.ViewModels
         #endregion
 
         #region Commands
+
+        public ICommand AddOptionalCircleCommand
+        {
+            get { return _addOptionalCircleCommand ?? (_addOptionalCircleCommand = new RelayCommand(AddOptionalCircle)); }
+        }
+
         public ICommand CalcCirclesCommand
         {
             get { return _calcCirclesCommand ?? (_calcCirclesCommand = new RelayCommand(CalcCircles)); }
@@ -129,29 +150,46 @@ namespace InscribedCircles.MainApp.ViewModels
         #endregion
 
         #region Private Methods
+
+        private void AddOptionalCircle()
+        {
+            var random = new Random();
+            var ellipse = new Ellipse
+            {
+                Height = CircleRadius * 2,
+                Width = CircleRadius * 2,
+                Fill = new SolidColorBrush(Color.FromRgb((byte)random.Next(50, 100), (byte)random.Next(50, 100),
+                        (byte)random.Next(50, 100)))
+            };
+            var dragBehavior = new MouseDragElementBehavior() { ConstrainToParentBounds = true };
+            dragBehavior.Attach(ellipse);
+            Canvas.SetLeft(ellipse, 0);
+            Canvas.SetTop(ellipse, 0);
+            CanvasControl.Children.Add(ellipse);
+        }
         private void CalcCircles()
         {
-            StaticData.DefinedWidth = RectangleWidth;
-            StaticData.DefinedHeight = RectangleHeight;
-
             var hasErrors = ValidateValues();
             if (hasErrors) return;
 
-            Circles = new ObservableCollection<Circle>();
             var rectangleWithCircles = new InscribedCirclesService();
             var points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
             var random = new Random();
+            CanvasControl.Children.Clear();
             foreach (var point in points)
             {
-                Circles.Add(new Circle
+                var ellipse = new Ellipse
                 {
-                    X = point.CenterX - CircleRadius,
-                    Y = point.CenterY - CircleRadius,
-                    Diameter = CircleRadius*2,
-                    ColorBrush =
-                        new SolidColorBrush(Color.FromRgb((byte) random.Next(100, 200), (byte) random.Next(100, 200),
-                            (byte) random.Next(100, 200)))
-                });
+                    Height = CircleRadius*2,
+                    Width = CircleRadius*2,
+                    Fill = new SolidColorBrush(Color.FromRgb((byte) random.Next(50, 100), (byte) random.Next(50, 100),
+                            (byte) random.Next(50, 100)))
+                };
+                var dragBehavior = new MouseDragElementBehavior(){ConstrainToParentBounds = true};
+                dragBehavior.Attach(ellipse);
+                Canvas.SetLeft(ellipse, point.CenterX - CircleRadius);
+                Canvas.SetTop(ellipse, point.CenterY - CircleRadius);
+                CanvasControl.Children.Add(ellipse);
             }
             Container.RegisterInstance(points);
         }
@@ -173,12 +211,5 @@ namespace InscribedCircles.MainApp.ViewModels
         }
 
         #endregion
-    }
-
-    public static class StaticData
-    {
-        public static double Scale;
-        public static double DefinedHeight;
-        public static double DefinedWidth;
     }
 }
