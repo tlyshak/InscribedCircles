@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,7 +9,6 @@ using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Core;
-using InscribedCircles.MainApp.Models;
 using InscribedCircles.MainApp.Windows;
 using Microsoft.Expression.Interactivity.Layout;
 using Microsoft.Practices.Unity;
@@ -19,7 +19,6 @@ namespace InscribedCircles.MainApp.ViewModels
     public class MainViewModel : ViewModel
     {
         #region Fields
-        private ObservableCollection<Circle> _circles = new ObservableCollection<Circle>();
         private ICommand _calcCirclesCommand;
         private ICommand _showCoordinatesCommand;
         private double _circleRadius;
@@ -27,43 +26,60 @@ namespace InscribedCircles.MainApp.ViewModels
         private double _rectangleHeight;
         private double _minimalGap;
         private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
-        private bool _isBusy;
-        private Canvas _canvasControl = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
-        private ICommand _addOptionalCircleCommand;
+        private Canvas _circlesPlace = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
+        private ICommand _addNewCircleCommand;
+        private readonly Random _random;
+        private int _circlesCount;
+        private double _newCircleRadius;
+        private double _newCircleMaxRadius;
 
         #endregion
 
         #region Properties
 
-        public Canvas CanvasControl
+        public double NewCircleMaxRadius
         {
-            get { return _canvasControl; }
+            get { return _newCircleMaxRadius; }
             set
             {
-                _canvasControl = value;
-                RaisePropertyChanged(() => CanvasControl);
+                if (Equals(_newCircleMaxRadius, value)) return;
+                _newCircleMaxRadius = value; 
+                RaisePropertyChanged(() => NewCircleMaxRadius);
             }
         }
 
-        public bool IsBusy
+        public double NewCircleRadius
         {
-            get { return _isBusy; }
+            get { return _newCircleRadius; }
             set
             {
-                if(Equals(_isBusy, value)) return;
-                _isBusy = value;
-                RaisePropertyChanged(() => IsBusy);
+                if(Equals(_newCircleRadius, value)) return;
+                _newCircleRadius = value;
+                NewCircleMaxRadius = RectangleHeight < RectangleWidth ? RectangleHeight/2 : RectangleWidth/2;
+                if (_newCircleRadius > NewCircleMaxRadius) _newCircleRadius = NewCircleMaxRadius;
+                RaisePropertyChanged(() => NewCircleRadius);
             }
         }
 
-        public ObservableCollection<Circle> Circles
+        public int CirclesCount
         {
-            get { return _circles; }
+            get { return _circlesCount; }
             set
             {
-                if (Equals(_circles, value)) return;
-                _circles = value;
-                RaisePropertyChanged(() => Circles);
+                if (Equals(_circlesCount, value)) return;
+                _circlesCount = value;
+                RaisePropertyChanged(() => CirclesCount);
+            }
+        }
+
+        public Canvas CirclesPlace
+        {
+            get { return _circlesPlace; }
+            set
+            {
+                if(Equals(_circlesPlace, value)) return;
+                _circlesPlace = value;
+                RaisePropertyChanged(() => CirclesPlace);
             }
         }
         public double CircleRadius
@@ -124,9 +140,9 @@ namespace InscribedCircles.MainApp.ViewModels
 
         #region Commands
 
-        public ICommand AddOptionalCircleCommand
+        public ICommand AddNewCircleCommand
         {
-            get { return _addOptionalCircleCommand ?? (_addOptionalCircleCommand = new RelayCommand(AddOptionalCircle)); }
+            get { return _addNewCircleCommand ?? (_addNewCircleCommand = new RelayCommand(AddNewCircle)); }
         }
 
         public ICommand CalcCirclesCommand
@@ -146,52 +162,59 @@ namespace InscribedCircles.MainApp.ViewModels
             var radMenuItem = new RadMenuItem {Header = "Файл"};
             radMenuItem.Items.Add(new RadMenuItem {Header = "Вихід", Command = new RelayCommand(() => Application.Current.Shutdown())});
             MenuItems.Add(radMenuItem);
+
+            _random = new Random();
         }
         #endregion
 
         #region Private Methods
 
-        private void AddOptionalCircle()
+        private void AddNewCircle()
         {
-            var random = new Random();
-            var ellipse = new Ellipse
-            {
-                Height = CircleRadius * 2,
-                Width = CircleRadius * 2,
-                Fill = new SolidColorBrush(Color.FromRgb((byte)random.Next(50, 100), (byte)random.Next(50, 100),
-                        (byte)random.Next(50, 100)))
-            };
-            var dragBehavior = new MouseDragElementBehavior() { ConstrainToParentBounds = true };
-            dragBehavior.Attach(ellipse);
-            Canvas.SetLeft(ellipse, 0);
-            Canvas.SetTop(ellipse, 0);
-            CanvasControl.Children.Add(ellipse);
+            if(NewCircleRadius == 0) return;
+            AddCircle(0,0, NewCircleRadius);
+
+            CirclesCount = CirclesPlace.Children.Count;
         }
+
         private void CalcCircles()
         {
             var hasErrors = ValidateValues();
             if (hasErrors) return;
 
+            CirclesPlace.Children.Clear();
             var rectangleWithCircles = new InscribedCirclesService();
-            var points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
-            var random = new Random();
-            CanvasControl.Children.Clear();
+            var points =
+                rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap)
+                    .ToList();
+            if (points.Count > 1000)
+            {
+                MessageBox.Show("Кількість кіл надто велика і може призвести до втрати швидкодії.\n" +
+                                "Попробуйте змінити параметри:)");
+                return;
+            }
             foreach (var point in points)
             {
-                var ellipse = new Ellipse
-                {
-                    Height = CircleRadius*2,
-                    Width = CircleRadius*2,
-                    Fill = new SolidColorBrush(Color.FromRgb((byte) random.Next(50, 100), (byte) random.Next(50, 100),
-                            (byte) random.Next(50, 100)))
-                };
-                var dragBehavior = new MouseDragElementBehavior(){ConstrainToParentBounds = true};
-                dragBehavior.Attach(ellipse);
-                Canvas.SetLeft(ellipse, point.CenterX - CircleRadius);
-                Canvas.SetTop(ellipse, point.CenterY - CircleRadius);
-                CanvasControl.Children.Add(ellipse);
+                AddCircle(point.CenterX - CircleRadius, point.CenterY - CircleRadius, CircleRadius);
             }
+            CirclesCount = CirclesPlace.Children.Count;
             Container.RegisterInstance(points);
+        }
+
+        private void AddCircle(double offsetX, double offsetY, double circleRadius)
+        {
+            var ellipse = new Ellipse
+            {
+                Height = circleRadius * 2,
+                Width = circleRadius * 2,
+                Fill = new SolidColorBrush(Color.FromRgb((byte)_random.Next(50, 100), (byte)_random.Next(50, 100),
+                        (byte)_random.Next(50, 100)))
+            };
+            var dragBehavior = new MouseDragElementBehavior { ConstrainToParentBounds = true };
+            dragBehavior.Attach(ellipse);
+            Canvas.SetLeft(ellipse, offsetX);
+            Canvas.SetTop(ellipse, offsetY);
+            CirclesPlace.Children.Add(ellipse);
         }
 
         private void ShowCoordinates()

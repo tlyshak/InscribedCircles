@@ -41,14 +41,15 @@
     </Window.Resources>
 	<Grid x:Name="MainGrid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="2*"/>
 			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition x:Name="GuiColumnDefinition" Width="1*"/>
+			<ColumnDefinition Width="3*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="3*"/>
-			<RowDefinition Height="1*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		    <RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<telerik:RadMenu Grid.ColumnSpan="3" ItemsSource="{Binding MenuItems}"/>
 		<GroupBox Grid.Row="1" Grid.Column="0" Margin="5" x:Name="GroupBox">
@@ -83,17 +84,38 @@
 					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleHeight, Mode=TwoWay}"/>
                 
 				<TextBlock Margin="1" Grid.Column="0" Grid.Row="3"><Run Text="Мінімальний проміжок"/></TextBlock>
-				<telerik:RadNumericUpDown x:Name="MinGapUpDown" Grid.Column="1" Grid.Row="3"
+                <telerik:RadNumericUpDown x:Name="MinGapUpDown" Grid.Column="1" Grid.Row="3"
 					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding MinimalGap, Mode=TwoWay}"/>
 
-                <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Center"
-					Grid.ColumnSpan="2" Grid.Row="4" Content="Додати коло" Command="{Binding AddOptionalCircleCommand}"/>
-                
-				<telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right"
 					Grid.ColumnSpan="2" Grid.Row="4" Content="Обрахувати" Command="{Binding CalcCirclesCommand}"/>
 			</Grid>
 		</GroupBox>
-		<GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
+        <GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold"><Run Text="Добавити коло"/></TextBlock>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1"><Run Text="Радіус кола:"/></TextBlock>
+                <telerik:RadNumericUpDown x:Name="NewCircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
+					Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleWidth}" Value="{Binding NewCircleRadius, Mode=TwoWay}"/>
+                <telerik:RadButton Margin="1" Grid.Column="0" Grid.Row="1" Content="Добавити"
+                                   Grid.ColumnSpan="2" HorizontalAlignment="Right"
+                                   Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}"
+                                   Command="{Binding AddNewCircleCommand}"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Margin="5" Grid.Row="3" Grid.Column="0">
 			<GroupBox.HeaderTemplate>
 				<DataTemplate>
 					<TextBlock FontWeight="Bold"><Run Text="Результати"/></TextBlock>
@@ -109,15 +131,15 @@
 					<ColumnDefinition Width="1*"/>
 				</Grid.ColumnDefinitions>
 				<TextBlock Margin="1"><Run Text="Кількість вписаних кіл:"/></TextBlock>
-				<TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding Circles.Count}"/>
-				<telerik:RadButton Visibility="{Binding Circles.Count, Converter={StaticResource IntToVisibilityConverter}}" Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
+                <TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding CirclesCount}"/>
+                <telerik:RadButton Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}" Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
 					Command="{Binding ShowCoordinatesCommand}"/>
 			</Grid>
 		</GroupBox>
-        <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"/>
-        <Viewbox Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Stretch="Uniform">
-            <ContentControl Margin="5"
-                        Content="{Binding CanvasControl}" Width="{Binding RectangleWidth}" Height="{Binding RectangleHeight}"/>
+        <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"/>
+        <Viewbox Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Stretch="Uniform">
+            <ContentControl x:Name="CirclesPlace" Margin="5"
+                        Content="{Binding CirclesPlace}" Width="{Binding RectangleWidth}" Height="{Binding RectangleHeight}"/>
         </Viewbox>
 	</Grid>
 </Window>

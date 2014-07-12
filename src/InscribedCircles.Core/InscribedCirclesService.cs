@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InscribedCircles.Core
 {
@@ -50,6 +51,7 @@ namespace InscribedCircles.Core
         }
         public IEnumerable<Point> GetCirclesCenters(double rectangleWidth, double rectangleHeight, double circleRadius, double gap)
         {
+            if ((2*gap + 2*circleRadius) > rectangleHeight) return Enumerable.Empty<Point>();
             var offsetY = FindMargin(rectangleHeight, circleRadius, gap);
             var offsetPercent = offsetY/GetMaxCircleRowsDifference(circleRadius, gap);
             var offsetX = circleRadius*offsetPercent + 0.5*gap;
