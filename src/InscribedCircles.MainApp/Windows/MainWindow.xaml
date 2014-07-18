@@ -90,8 +90,10 @@
                 <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 					Grid.ColumnSpan="2" Grid.Row="4" Content="Очистити" Command="{Binding ClearCirclesCommand}"/>
 
-                <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-					Grid.ColumnSpan="2" Grid.Row="4" Content="Обрахувати" Command="{Binding CalcCirclesCommand}"/>
+                <telerik:RadButton Margin="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" 
+                                   VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Обрахувати" 
+                                   Command="{Binding CalcCirclesCommand}" 
+                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
 			</Grid>
 		</GroupBox>
         <GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
@@ -113,16 +115,16 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Margin="1"><Run Text="Радіус кола:"/></TextBlock>
                 <telerik:RadNumericUpDown x:Name="NewCircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
-                                          Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding NewCircleMaxRadius}"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" 
                                           Value="{Binding NewCircleRadius, Mode=TwoWay}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="1" Margin="1"><Run Text="X:"/></TextBlock>
-                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="1"
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="1" IsEnabled="False"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleWidth}"
                                           Value="{Binding NewCircleLeft, Mode=TwoWay}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="2" Margin="1"><Run Text="Y:"/></TextBlock>
-                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="2"
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="2" IsEnabled="False"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleHeight}"
                                           Value="{Binding NewCircleTop, Mode=TwoWay}"/>
 

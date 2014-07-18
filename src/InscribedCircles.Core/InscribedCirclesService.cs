@@ -73,8 +73,8 @@ namespace InscribedCircles.Core
                 var newCircleCenter = GetNewCircleCenter(rectangleHeight, currentY, circleRadius, gap,
                     isPairedRowNext, isPairedRowNext ? offsetX : 0, offsetY);
                 if (newCircleCenter == null) break;
-                currentWidth = newCircleCenter.CenterX;
-                currentY = newCircleCenter.CenterY;
+                currentWidth = newCircleCenter.X;
+                currentY = newCircleCenter.Y;
             }
             return points;
         }
