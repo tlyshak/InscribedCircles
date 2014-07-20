@@ -47,10 +47,31 @@ namespace InscribedCircles.MainApp.ViewModels
         private double _newCircleLeft;
         private double _newCircleTop;
         private bool _isBlocked;
+        private bool _isCrossed;
 
         #endregion
 
         #region Properties
+
+        public bool IsCrossed
+        {
+            get { return _isCrossed; }
+            set
+            {
+                _isCrossed = value;
+                RaisePropertyChanged(() => IsCrossed);
+            }
+        }
+
+        public bool IsBlocked
+        {
+            get { return _isBlocked; }
+            set
+            {
+                _isBlocked = value;
+                RaisePropertyChanged(() => IsBlocked);
+            }
+        }
 
         public double NewCircleLeft
         {
@@ -290,6 +311,7 @@ namespace InscribedCircles.MainApp.ViewModels
         private void ellipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isCircleSelected = false;
+            IsBlocked = false;
         }
 
         private Ellipse GetCrossedCircle(Ellipse ellipse)
@@ -327,26 +349,23 @@ namespace InscribedCircles.MainApp.ViewModels
                 var x = mousePosition.X - _mouseOffsetX;
                 var y = mousePosition.Y - _mouseOffsetY;
                 var crossedCircle = GetCrossedCircle(ellipse);
-                if (crossedCircle != null)
+                IsCrossed = crossedCircle != null;
+                if (IsBlocked)
                 {
-                    if (_isBlocked)
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                    Point point = GetLastPoint(crossedCircle);
-                    /*if (point != null)
-                    {
-                        e.Handled = true;
-                        return;
-                    }*/
-                    _movingHistory.Add(new Point(point.X, point.Y));
-                    Canvas.SetLeft(ellipse, point.X);
-                    Canvas.SetTop(ellipse, point.Y);
-                    NewCircleLeft = Canvas.GetLeft(ellipse);
-                    NewCircleTop = Canvas.GetTop(ellipse);
-                    _isBlocked = true;
+                    //IsBlocked = false;
                     e.Handled = true;
+                }
+                else if (IsCrossed)
+                {
+                    Point point = GetLastPoint(crossedCircle);
+                    if (point != null && !IsBlocked)
+                    {
+                        IsBlocked = true;
+                        Canvas.SetLeft(ellipse, point.X);
+                        Canvas.SetTop(ellipse, point.Y);
+                        NewCircleLeft = Canvas.GetLeft(ellipse);
+                        NewCircleTop = Canvas.GetTop(ellipse);
+                    }
                 }
                 else
                 {
@@ -358,7 +377,6 @@ namespace InscribedCircles.MainApp.ViewModels
                         Canvas.SetTop(ellipse, y);
                         NewCircleLeft = x;
                         NewCircleTop = y;
-                        _isBlocked = false;
                     }
                     else
                     {
