@@ -82,7 +82,7 @@ namespace InscribedCircles.Core
         private Point GetNewCircleCenter(double rectangleHeight, double currentHeight, double circleRadius, double gap,
             bool isPairedRowNext, double offsetX = 0, double offsetY = 0)
         {
-            double centerY = currentHeight + 1.5*(2/Math.Sqrt(3)*circleRadius) + gap + offsetY;
+            double centerY = currentHeight + 1.5*(2/Math.Sqrt(3)*circleRadius) + 1.2*gap + offsetY;
             double centerX = isPairedRowNext ? (1.5 * gap + circleRadius) - offsetX : gap;
             return (centerY + circleRadius + gap) <= rectangleHeight ? new Point(centerX, centerY) : null;
         }

@@ -48,10 +48,32 @@ namespace InscribedCircles.MainApp.ViewModels
         private double _newCircleTop;
         private bool _isBlocked;
         private bool _isCrossed;
+        private double _positionX;
+        private double _positionY;
 
         #endregion
 
         #region Properties
+
+        public double PositionX
+        {
+            get { return _positionX; }
+            set
+            {
+                _positionX = value; 
+                RaisePropertyChanged(() => PositionX);
+            }
+        }
+
+        public double PositionY
+        {
+            get { return _positionY; }
+            set
+            {
+                _positionY = value; 
+                RaisePropertyChanged(() => PositionY);
+            }
+        }
 
         public bool IsCrossed
         {
@@ -343,12 +365,15 @@ namespace InscribedCircles.MainApp.ViewModels
         private void ellipse_MouseMove(object sender, MouseEventArgs e)
         {
             var mousePosition = e.GetPosition(CirclesCanvas);
+            var x = mousePosition.X - _mouseOffsetX;
+            var y = mousePosition.Y - _mouseOffsetY;
+            /*PositionX = x;
+            PositionY = y;*/
             if (_isCircleSelected)
             {
                 var ellipse = (Ellipse)sender;
-                var x = mousePosition.X - _mouseOffsetX;
-                var y = mousePosition.Y - _mouseOffsetY;
                 var crossedCircle = GetCrossedCircle(ellipse);
+
                 IsCrossed = crossedCircle != null;
                 if (IsBlocked)
                 {
@@ -363,8 +388,8 @@ namespace InscribedCircles.MainApp.ViewModels
                         IsBlocked = true;
                         Canvas.SetLeft(ellipse, point.X);
                         Canvas.SetTop(ellipse, point.Y);
-                        NewCircleLeft = Canvas.GetLeft(ellipse);
-                        NewCircleTop = Canvas.GetTop(ellipse);
+                        PositionX = Canvas.GetLeft(ellipse);
+                        PositionY = Canvas.GetTop(ellipse);
                     }
                 }
                 else
@@ -375,8 +400,8 @@ namespace InscribedCircles.MainApp.ViewModels
                         _movingHistory.Add(new Point(x, y));
                         Canvas.SetLeft(ellipse, x);
                         Canvas.SetTop(ellipse, y);
-                        NewCircleLeft = x;
-                        NewCircleTop = y;
+                        PositionX = x;
+                        PositionY = y;
                     }
                     else
                     {

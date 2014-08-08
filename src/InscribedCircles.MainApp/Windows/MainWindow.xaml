@@ -50,9 +50,8 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 		    <RowDefinition Height="Auto" />
-		    <RowDefinition Height="Auto" />
-		    <RowDefinition />
-		</Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 		<telerik:RadMenu Grid.ColumnSpan="3" ItemsSource="{Binding MenuItems}"/>
 		<GroupBox Grid.Row="1" Grid.Column="0" Margin="5" x:Name="GroupBox">
 			<GroupBox.HeaderTemplate>
@@ -160,33 +159,52 @@
                 <!--Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}"-->
             </Grid>
         </GroupBox>
-        <GroupBox Margin="5" Grid.Row="4" Grid.Column="0">
-			<GroupBox.HeaderTemplate>
-				<DataTemplate>
-					<TextBlock FontWeight="Bold"><Run Text="Результати"/></TextBlock>
-				</DataTemplate>
-			</GroupBox.HeaderTemplate>
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="2*"/>
-					<ColumnDefinition Width="1*"/>
-				</Grid.ColumnDefinitions>
-				<TextBlock Margin="1"><Run Text="Кількість вписаних кіл:"/></TextBlock>
-                <TextBlock Margin="1" Grid.Column="1" Grid.Row="0" Text="{Binding CirclesCount}"/>
-                <telerik:RadButton Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}" Style="{StaticResource LinkButton}" Grid.Column="0" Grid.Row="1" Content="Переглянути координати кіл"
-					Command="{Binding ShowCoordinatesCommand}"/>
-			</Grid>
-		</GroupBox>
         <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4"/>
-        <Viewbox x:Name="CirclesViewbox" Grid.Column="2" Grid.Row="1" Grid.RowSpan="4" Stretch="Uniform">
+        <Viewbox x:Name="CirclesViewbox" Grid.Column="2" Grid.Row="2" Grid.RowSpan="3" Stretch="Uniform">
             <Viewbox.Child>
                 <ContentControl Margin="5" Content="{Binding CirclesCanvas}"
                                 Width="{Binding RectangleWidth}" Height="{Binding RectangleHeight}"/>
             </Viewbox.Child>
         </Viewbox>
-	</Grid>
+        <GroupBox Margin="5" Grid.Row="1" Grid.Column="2">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold"><Run Text="Результати"/></TextBlock>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="1"><Run Text="Кількість вписаних кіл:"/></TextBlock>
+                    <TextBlock Foreground="Green" Margin="5,1,1,1" Text="{Binding CirclesCount}"/>
+                    <telerik:RadButton Margin="5,1,1,1" Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}" 
+                                       Style="{StaticResource LinkButton}" Content="Координати" Command="{Binding ShowCoordinatesCommand}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+                    <StackPanel Margin="1" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center"><Run Text="X:"/></TextBlock>
+                        <telerik:RadNumericUpDown Margin="5,0,0,0" IsEnabled="False"
+                                          Minimum="0" ValueFormat="Numeric" Maximum="{Binding RectangleWidth}"
+                                          Value="{Binding PositionX}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="15,1,1,1" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center"><Run Text="Y:"/></TextBlock>
+                        <telerik:RadNumericUpDown Margin="5,0,0,0" IsEnabled="False"
+                                          Minimum="0" ValueFormat="Numeric" Maximum="{Binding RectangleHeight}"
+                                          Value="{Binding PositionY}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
 </Window>
