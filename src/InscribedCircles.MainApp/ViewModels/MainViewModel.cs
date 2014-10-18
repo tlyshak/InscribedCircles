@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Core;
 using InscribedCircles.MainApp.Windows;
 using Microsoft.Expression.Interactivity.Layout;
 using Microsoft.Practices.Unity;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Telerik.Windows.Controls;
 using Point = InscribedCircles.Core.Point;
 
@@ -24,32 +22,31 @@ namespace InscribedCircles.MainApp.ViewModels
     {
         #region Fields
 
-        private int _maxCircles = 1000;
+        private const int MaxCircles = 1000;
+        private readonly Random _random;
         private ICommand _calcCirclesCommand;
         private ICommand _showCoordinatesCommand;
+        private ICommand _addNewCircleCommand;
+        private ICommand _clearCirclesCommand;
+        private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
+        private Canvas _inscribingArea = new Canvas { Background = new SolidColorBrush(Colors.LightSteelBlue) };
+        private IList<Point> _movingHistory;
+        private int _circlesCount;
         private double _circleRadius;
         private double _rectangleWidth;
         private double _rectangleHeight;
         private double _minimalGap;
-        private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
-        private Canvas _circlesCanvas = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
-        private ICommand _addNewCircleCommand;
-        private readonly Random _random;
-        private int _circlesCount;
-        private double _newCircleRadius;
-        private double _newCircleMaxRadius;
-        private ICommand _clearCirclesCommand;
-        private ObservableCollection<Point> _points = new ObservableCollection<Point>();
-        private bool _isCircleSelected;
-        private IList<Point> _movingHistory;
-        private double _mouseOffsetX;
-        private double _mouseOffsetY;
         private double _newCircleLeft;
         private double _newCircleTop;
-        private bool _isBlocked;
-        private bool _isCrossed;
+        private double _newCircleRadius;
+        private double _newCircleMaxRadius;
+        private double _mouseOffsetX;
+        private double _mouseOffsetY;
         private double _positionX;
         private double _positionY;
+        private bool _isCircleSelected;
+        private bool _isBlocked;
+        private bool _isCrossed;
 
         #endregion
 
@@ -127,17 +124,6 @@ namespace InscribedCircles.MainApp.ViewModels
             }
         }
 
-        public ObservableCollection<Point> Points
-        {
-            get { return _points; }
-            set
-            {
-                if (Equals(_points, value)) return;
-                _points = value; 
-                RaisePropertyChanged(() => Points);
-            }
-        }
-
         public int CirclesCount
         {
             get { return _circlesCount; }
@@ -149,14 +135,14 @@ namespace InscribedCircles.MainApp.ViewModels
             }
         }
 
-        public Canvas CirclesCanvas
+        public Canvas InscribingArea
         {
-            get { return _circlesCanvas; }
+            get { return _inscribingArea; }
             set
             {
-                if(Equals(_circlesCanvas, value)) return;
-                _circlesCanvas = value;
-                RaisePropertyChanged(() => CirclesCanvas);
+                if(Equals(_inscribingArea, value)) return;
+                _inscribingArea = value;
+                RaisePropertyChanged(() => InscribingArea);
             }
         }
         public double CircleRadius
@@ -270,14 +256,22 @@ namespace InscribedCircles.MainApp.ViewModels
 
         private void ClearCircles()
         {
-            CirclesCanvas.Children.Clear();
+            InscribingArea.Children.Clear();
         }
 
         private void AddNewCircle()
         {
             if(NewCircleRadius == 0) return;
-            AddCircle(0,0, NewCircleRadius);
-            CirclesCount = CirclesCanvas.Children.Count;
+            var point = FindFreeSpaceForCircle();
+            if (point != null)
+            {
+                AddCircle(point.X, point.Y, NewCircleRadius);
+                CirclesCount = InscribingArea.Children.Count;
+            }
+            else
+            {
+                MessageBox.Show("Немає вільного місця щоб вставити коло.");
+            }
         }
 
         private void CalcCircles(MainWindow window)
@@ -285,16 +279,11 @@ namespace InscribedCircles.MainApp.ViewModels
             var hasErrors = ValidateValues();
             if (hasErrors) return;
 
-            double? widthValue = window.RectWidthUpDown.Value;
-            double? heightValue = window.RectHeightUpDown.Value;
-            double? circleRadiusValue = window.RectWidthUpDown.Value;
-            double? minimalGapValue = window.RectWidthUpDown.Value;
-
             ClearCircles();
             var rectangleWithCircles = new InscribedCirclesService();
             var points =
                 rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
-            if (points.Count() > _maxCircles)
+            if (points.Count() > MaxCircles)
             {
                 MessageBox.Show("Кількість кіл надто велика і може призвести до втрати швидкодії.\n" +
                                 "Попробуйте змінити параметри:)");
@@ -302,8 +291,27 @@ namespace InscribedCircles.MainApp.ViewModels
             }
             foreach (var point in points)
                 AddCircle(point.X - CircleRadius, point.Y - CircleRadius, CircleRadius);
-            CirclesCount = CirclesCanvas.Children.Count;
+            CirclesCount = InscribingArea.Children.Count;
             Container.RegisterInstance(points);
+        }
+
+        private Point FindFreeSpaceForCircle()
+        {
+            for (var i = MinimalGap; i < RectangleWidth; i++)
+            {
+                for (var j = MinimalGap; j < RectangleHeight; j++)
+                {
+                    bool isCrosed = false;
+                    foreach (Ellipse circle in InscribingArea.Children)
+                    {
+                        if (CheckCirclesCrossing(i, j, Canvas.GetLeft(circle), Canvas.GetTop(circle), NewCircleRadius))
+                            isCrosed = true;
+                    }
+                    if (!isCrosed && (i + 2*(NewCircleRadius + MinimalGap)) < RectangleWidth &&
+                        (j + 2*(NewCircleRadius + MinimalGap)) < RectangleHeight) return new Point(i, j);
+                }
+            }
+            return null;
         }
 
         private void AddCircle(double offsetX, double offsetY, double circleRadius)
@@ -322,7 +330,7 @@ namespace InscribedCircles.MainApp.ViewModels
             ellipse.MouseLeftButtonUp += ellipse_MouseLeftButtonUp;
             Canvas.SetLeft(ellipse, offsetX);
             Canvas.SetTop(ellipse, offsetY);
-            CirclesCanvas.Children.Add(ellipse);
+            InscribingArea.Children.Add(ellipse);
         }
 
         private void ShowCoordinates()
@@ -338,7 +346,7 @@ namespace InscribedCircles.MainApp.ViewModels
 
         private Ellipse GetCrossedCircle(Ellipse ellipse)
         {
-            foreach (Ellipse circle in CirclesCanvas.Children)
+            foreach (Ellipse circle in InscribingArea.Children)
             {
                 if (!Equals(circle, ellipse))
                 {
@@ -364,11 +372,9 @@ namespace InscribedCircles.MainApp.ViewModels
 
         private void ellipse_MouseMove(object sender, MouseEventArgs e)
         {
-            var mousePosition = e.GetPosition(CirclesCanvas);
+            var mousePosition = e.GetPosition(InscribingArea);
             var x = mousePosition.X - _mouseOffsetX;
             var y = mousePosition.Y - _mouseOffsetY;
-            /*PositionX = x;
-            PositionY = y;*/
             if (_isCircleSelected)
             {
                 var ellipse = (Ellipse)sender;
@@ -377,7 +383,6 @@ namespace InscribedCircles.MainApp.ViewModels
                 IsCrossed = crossedCircle != null;
                 if (IsBlocked)
                 {
-                    //IsBlocked = false;
                     e.Handled = true;
                 }
                 else if (IsCrossed)
@@ -421,7 +426,7 @@ namespace InscribedCircles.MainApp.ViewModels
         {
             _isCircleSelected = true;
             var ellipse = (Ellipse)sender;
-            var mousePositionCanvas = e.GetPosition(CirclesCanvas);
+            var mousePositionCanvas = e.GetPosition(InscribingArea);
             _mouseOffsetX = mousePositionCanvas.X - Canvas.GetLeft(ellipse);
             _mouseOffsetY = mousePositionCanvas.Y - Canvas.GetTop(ellipse);
             _movingHistory = new List<Point> { new Point(Canvas.GetLeft(ellipse), Canvas.GetTop(ellipse)) };
@@ -438,5 +443,11 @@ namespace InscribedCircles.MainApp.ViewModels
         }
 
         #endregion
+    }
+
+    public class Area
+    {
+        public double Width { get; set; }
+        public double Height { get; set; }
     }
 }

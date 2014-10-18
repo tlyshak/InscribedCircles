@@ -56,27 +56,27 @@
 		<GroupBox Grid.Row="1" Grid.Column="0" Margin="5" x:Name="GroupBox">
 			<GroupBox.HeaderTemplate>
 				<DataTemplate>
-					<TextBlock FontWeight="Bold"><Run Text="Параметри"/></TextBlock>
+                    <TextBlock FontWeight="Bold"><Run Text="Розміри заготовки"/></TextBlock>
 				</DataTemplate>
 			</GroupBox.HeaderTemplate>
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="2*"/>
 					<ColumnDefinition Width="1*"/>
 				</Grid.ColumnDefinitions>
                 
-				<TextBlock Margin="1" Grid.Column="0" Grid.Row="0"><Run Text="Ширина заготовки"/></TextBlock>
+				<TextBlock Margin="1" Grid.Column="0" Grid.Row="0"><Run Text="Ширина"/></TextBlock>
 				<telerik:RadNumericUpDown x:Name="RectWidthUpDown" Grid.Column="1" Grid.Row="0"
 					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleWidth, Mode=TwoWay}"/>
                 
-				<TextBlock Margin="1" Grid.Column="0" Grid.Row="1"><Run Text="Висота заготовки"/></TextBlock>
-				<telerik:RadNumericUpDown x:Name="RectHeightUpDown" Grid.Column="1" Grid.Row="1" 
+				<TextBlock Margin="1" Grid.Column="0" Grid.Row="1"><Run Text="Висота"/></TextBlock>
+                <telerik:RadNumericUpDown x:Name="RectHeightUpDown" Grid.Column="1" Grid.Row="1" 
 					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleHeight, Mode=TwoWay}"/>
-                </Grid>
+            </Grid>
 		</GroupBox>
         <GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
             <GroupBox.HeaderTemplate>
@@ -139,30 +139,27 @@
                                           Minimum="0" Margin="1" ValueFormat="Numeric" 
                                           Value="{Binding NewCircleRadius, Mode=TwoWay}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="1" Margin="1"><Run Text="X:"/></TextBlock>
-                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="1" IsEnabled="False"
+                <CheckBox x:Name="SetManualyCoordinatesBox" Grid.Column="0" Grid.Row="1" Content="Вказати вручну координати"></CheckBox>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Margin="1"><Run Text="X:"/></TextBlock>
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="2" IsEnabled="{Binding ElementName=SetManualyCoordinatesBox, Path=IsChecked}"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleWidth}"
                                           Value="{Binding NewCircleLeft, Mode=TwoWay}"/>
 
-                <TextBlock Grid.Column="0" Grid.Row="2" Margin="1"><Run Text="Y:"/></TextBlock>
-                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="2" IsEnabled="False"
+                <TextBlock Grid.Column="0" Grid.Row="3" Margin="1"><Run Text="Y:"/></TextBlock>
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="3" IsEnabled="{Binding ElementName=SetManualyCoordinatesBox, Path=IsChecked}"
                                           Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleHeight}"
                                           Value="{Binding NewCircleTop, Mode=TwoWay}"/>
-                
-                <TextBlock Grid.Column="0" Grid.Row="3" Margin="1" Text="{Binding IsBlocked}"/>
-                <TextBlock Grid.Column="1" Grid.Row="3" Margin="1" Text="{Binding IsCrossed}"/>
 
                 <telerik:RadButton Margin="1" Grid.Column="0" Grid.Row="4" Content="Добавити"
                                    Grid.ColumnSpan="2" HorizontalAlignment="Right"
                                    Command="{Binding AddNewCircleCommand}"/>
-
-                <!--Visibility="{Binding CirclesCount, Converter={StaticResource IntToVisibilityConverter}}"-->
             </Grid>
         </GroupBox>
         <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="4"/>
         <Viewbox x:Name="CirclesViewbox" Grid.Column="2" Grid.Row="2" Grid.RowSpan="3" Stretch="Uniform">
             <Viewbox.Child>
-                <ContentControl Margin="5" Content="{Binding CirclesCanvas}"
+                <ContentControl Margin="5" Content="{Binding InscribingArea}"
                                 Width="{Binding RectangleWidth}" Height="{Binding RectangleHeight}"/>
             </Viewbox.Child>
         </Viewbox>
