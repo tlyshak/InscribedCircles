@@ -2,13 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        xmlns:converters="clr-namespace:InscribedCircles.MainApp.Converters"
-        xmlns:viewModels="clr-namespace:InscribedCircles.MainApp.ViewModels"
+                   xmlns:viewModels="clr-namespace:InscribedCircles.MainApp.ViewModels"
         xmlns:views="clr-namespace:InscribedCircles.MainApp.Views"
         Header="Розрахунок вписаних кіл" Height="500" Width="800" WindowStartupLocation="CenterScreen"
         telerik:AnimationManager.IsAnimationEnabled="False">
     <telerik:RadWindow.Resources>
-        <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
         <Style x:Key="VerticalSeparatorStyle"  TargetType="{x:Type Separator}" BasedOn="{StaticResource {x:Type Separator}}">
         	<Setter Property="Margin" Value="6,0,6,0"/>
         	<Setter Property="LayoutTransform">
@@ -23,23 +21,6 @@
         		</Setter.Value>
         	</Setter>
         </Style>
-        <!--<Style x:Key="LinkButton" TargetType="{x:Type Button}">
-        	<Setter Property="Template">
-        		<Setter.Value>
-        			<ControlTemplate TargetType="{x:Type Button}">
-        				<TextBlock TextDecorations="Underline"><InlineUIContainer>
-        						<ContentPresenter />
-        					</InlineUIContainer></TextBlock>
-        			</ControlTemplate>
-        		</Setter.Value>
-        	</Setter>
-        	<Setter Property="Foreground" Value="Blue" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Foreground" Value="Red" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>-->
     </telerik:RadWindow.Resources>
 	<Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -70,93 +51,6 @@
                 </ContentControl.Resources>
             </ContentControl>
         </StackPanel>
-        <!--<GroupBox Grid.Row="1" Grid.Column="0" Margin="5" x:Name="GroupBox">
-			<GroupBox.HeaderTemplate>
-				<DataTemplate>
-					<TextBlock FontWeight="Bold"><Run Text="Параметри"/></TextBlock>
-				</DataTemplate>
-			</GroupBox.HeaderTemplate>
-			<Grid x:Name="ParametersGrid">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="2*"/>
-					<ColumnDefinition Width="1*"/>
-				</Grid.ColumnDefinitions>
-                
-				<TextBlock Margin="1" Grid.Column="0" Grid.Row="0"><Run Text="Ширина заготовки"/></TextBlock>
-				<telerik:RadNumericUpDown x:Name="RectWidthUpDown" Grid.Column="1" Grid.Row="0"
-					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleWidth, Mode=TwoWay}"/>
-                
-				<TextBlock Margin="1" Grid.Column="0" Grid.Row="1"><Run Text="Висота заготовки"/></TextBlock>
-				<telerik:RadNumericUpDown x:Name="RectHeightUpDown" Grid.Column="1" Grid.Row="1" 
-					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding RectangleHeight, Mode=TwoWay}"/>
-
-                <CheckBox x:Name="AutoInscribeCheckBox"
-                           Margin="1" Grid.Row="2" Grid.Column="0" Content="Вписати кола автоматично"/>
-                <TextBlock IsEnabled="{Binding ElementName=AutoInscribeCheckBox, Path=IsChecked}" 
-                           Grid.Row="3" Grid.Column="0" Margin="1"><Run Text="Радіус кола"/></TextBlock>
-                <telerik:RadNumericUpDown x:Name="CircleRadiusUpDown"
-                                          IsEnabled="{Binding ElementName=AutoInscribeCheckBox, Path=IsChecked}" 
-                                          Grid.Column="1" Grid.Row="3" Minimum="0" Margin="1" ValueFormat="Numeric"
-                                          Value="{Binding CircleRadius, Mode=TwoWay}"/>
-
-                <TextBlock IsEnabled="{Binding ElementName=AutoInscribeCheckBox, Path=IsChecked}" 
-                           Margin="1" Grid.Column="0" Grid.Row="4"><Run Text="Мінімальний проміжок"/></TextBlock>
-                <telerik:RadNumericUpDown x:Name="MinGapUpDown"
-                                          IsEnabled="{Binding ElementName=AutoInscribeCheckBox, Path=IsChecked}" 
-                                          Grid.Column="1" Grid.Row="4" Minimum="0" Margin="1" ValueFormat="Numeric"
-                                          Value="{Binding MinimalGap, Mode=TwoWay}"/>
-                
-                <telerik:RadButton x:Name="CalculateButton"
-                                   Command="{Binding CalculateCommand}"
-                                   Grid.Row="5" Grid.Column="1" Content="Обрахувати"/>
-            </Grid>
-		</GroupBox>-->
-        <!--<GroupBox Margin="5" Grid.Row="2" Grid.Column="0">
-            <GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock FontWeight="Bold"><Run Text="Вписати кола"/></TextBlock>
-                </DataTemplate>
-            </GroupBox.HeaderTemplate>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Margin="1"><Run Text="Радіус кола"/></TextBlock>
-                <telerik:RadNumericUpDown x:Name="CircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
-					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding CircleRadius, Mode=TwoWay}"/>
-
-                <TextBlock Margin="1" Grid.Column="0" Grid.Row="3"><Run Text="Мінімальний проміжок"/></TextBlock>
-                <telerik:RadNumericUpDown x:Name="MinGapUpDown" Grid.Column="1" Grid.Row="3"
-					Minimum="0" Margin="1" ValueFormat="Numeric" Value="{Binding MinimalGap, Mode=TwoWay}"/>
-
-                <telerik:RadButton Margin="1" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-					Grid.ColumnSpan="2" Grid.Row="4" Content="Очистити" Command="{Binding ClearCirclesCommand}"/>
-
-                <telerik:RadButton Margin="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" 
-                                   VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Обрахувати" 
-                                   Command="{Binding CalcCirclesCommand}" 
-                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-
-            </Grid>
-        </GroupBox>-->
         <Separator Style="{DynamicResource VerticalSeparatorStyle}" Grid.Column="1" Grid.Row="1"/>
         <ContentControl Margin="5" Grid.Row="1" Grid.Column="2" Content="{Binding CirclesResultContentViewModel}">
             <ContentControl.Resources>
