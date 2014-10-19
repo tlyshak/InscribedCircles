@@ -1,8 +1,9 @@
-﻿<Window x:Class="InscribedCircles.MainApp.Windows.SettingsWindow"
+﻿<telerik:RadWindow x:Class="InscribedCircles.MainApp.Windows.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Налаштування" Height="300" Width="300" WindowStartupLocation="CenterScreen">
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        Header="Налаштування" Height="300" Width="300" WindowStartupLocation="CenterScreen">
     <Grid>
         
     </Grid>
-</Window>
+</telerik:RadWindow>

@@ -1,8 +1,8 @@
-﻿<Window x:Class="InscribedCircles.MainApp.Windows.CoordinatesCirclesWindow"
+﻿<telerik:RadWindow x:Class="InscribedCircles.MainApp.Windows.CoordinatesCirclesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="Координати кіл" Height="300" Width="300" WindowStartupLocation="CenterScreen">
+        Header="Координати кіл" Height="300" Width="300" WindowStartupLocation="CenterScreen">
     <Grid>
         <!--<telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" >
             <telerik:RadGridView ItemsSource="{Binding Points}" ShowColumnSortIndexes="False" ShowGroupPanel="False" 
@@ -10,4 +10,4 @@
         </telerik:RadBusyIndicator>-->
         <DataGrid ItemsSource="{Binding Points}"></DataGrid>
     </Grid>
-</Window>
+</telerik:RadWindow>

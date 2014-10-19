@@ -39,15 +39,32 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="Telerik.Windows.Controls.Navigation">
+      <HintPath>..\..\lib\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ViewModelAttribute.cs" />
     <Compile Include="ContainerAccessor.cs" />
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\IAddCircleViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\ICalculateParametersViewModel.cs" />
+    <Compile Include="Interfaces\ViewModels\ICirclesResultViewModel.cs" />
+    <Compile Include="Interfaces\Windows\ICoordinatesCirclesWindow.cs" />
+    <Compile Include="Interfaces\Windows\IMainWindow.cs" />
+    <Compile Include="Interfaces\Windows\ISettingsWindow.cs" />
+    <Compile Include="Interfaces\Windows\IWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InscribedCircles.Core\InscribedCircles.Core.csproj">
+      <Project>{6FC7B5EC-CEB0-4BC1-B8BF-2929A5F18247}</Project>
+      <Name>InscribedCircles.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="InscribedCircles.MainApp.Views.AddCircleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <GroupBox>
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock FontWeight="Bold"><Run Text="Добавити коло"/></TextBlock>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1"><Run Text="Радіус кола:"/></TextBlock>
+                <telerik:RadNumericUpDown x:Name="NewCircleRadiusUpDown" Grid.Column="1" Grid.Row="0"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" 
+                                          Value="{Binding NewCircleRadius, Mode=TwoWay}"/>
+
+                <TextBlock Margin="1" Grid.Column="0" Grid.Row="1"><Run Text="Мінімальний проміжок"/></TextBlock>
+                <telerik:RadNumericUpDown x:Name="MinGapUpDown"
+                                          Grid.Column="1" Grid.Row="1" Minimum="0" Margin="1" ValueFormat="Numeric"
+                                          Value="{Binding MinimalGap, Mode=TwoWay}"/>
+
+                <CheckBox x:Name="SetCoordinatesManuallyCheckBox"
+                          IsChecked="{Binding SetCoordinatesManually, Mode=TwoWay}"
+                          Margin="1" Grid.Row="2" Grid.Column="0" Content="Вказати координати вручну"/>
+                <TextBlock Grid.Column="0" Grid.Row="3" Margin="1"><Run Text="X:"/></TextBlock>
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="3"
+                                          IsEnabled="{Binding ElementName=SetCoordinatesManuallyCheckBox, Path=IsChecked}"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleWidth}"
+                                          Value="{Binding NewCircleLeft, Mode=TwoWay}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="4" Margin="1"><Run Text="Y:"/></TextBlock>
+                <telerik:RadNumericUpDown Grid.Column="1" Grid.Row="4"
+                                          IsEnabled="{Binding ElementName=SetCoordinatesManuallyCheckBox, Path=IsChecked}"
+                                          Minimum="0" Margin="1" ValueFormat="Numeric" Maximum="{Binding RectangleHeight}"
+                                          Value="{Binding NewCircleTop, Mode=TwoWay}"/>
+                
+                <telerik:RadButton Margin="1" Grid.Column="0" Grid.Row="5" Content="Добавити"
+                                   Grid.ColumnSpan="2" HorizontalAlignment="Right"
+                                   Command="{Binding AddNewCircleCommand}"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

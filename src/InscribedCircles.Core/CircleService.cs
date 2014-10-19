@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace InscribedCircles.Core
 {
-    public class InscribedCirclesService
+    public class CircleService
     {
         private double GetMaxCircleRowsDifference(double circleRadius, double gap)
         {

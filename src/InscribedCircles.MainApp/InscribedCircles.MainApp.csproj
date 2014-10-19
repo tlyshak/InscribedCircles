@@ -77,15 +77,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Attributes\ViewModelAttribute.cs" />
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
     <Compile Include="Models\Circle.cs" />
+    <Compile Include="ViewModels\AddCircleViewModel.cs" />
+    <Compile Include="ViewModels\CalculateParametersViewModel.cs" />
+    <Compile Include="ViewModels\CirclesResultViewModel.cs" />
     <Compile Include="ViewModels\CoordinatesCirclesViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\AddCircleView.xaml.cs">
+      <DependentUpon>AddCircleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CalculateParametersView.xaml.cs">
+      <DependentUpon>CalculateParametersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CirclesResultView.xaml.cs">
+      <DependentUpon>CirclesResultView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AddCircleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CalculateParametersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CirclesResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CoordinatesCirclesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

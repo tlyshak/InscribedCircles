@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
+﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
-using InscribedCircles.Core;
-using InscribedCircles.MainApp.Windows;
-using Microsoft.Expression.Interactivity.Layout;
+using InscribedCircles.Abstraction.Interfaces.Windows;
 using Microsoft.Practices.Unity;
 using Telerik.Windows.Controls;
-using Point = InscribedCircles.Core.Point;
 
 namespace InscribedCircles.MainApp.ViewModels
 {
@@ -24,15 +11,14 @@ namespace InscribedCircles.MainApp.ViewModels
     {
         #region Fields
 
-        private int _maxCircles = 1000;
-        private ICommand _calcCirclesCommand;
+        /*private int _maxCircles = 1000;
         private ICommand _showCoordinatesCommand;
         private double _circleRadius;
         private double _rectangleWidth;
         private double _rectangleHeight;
-        private double _minimalGap;
+        private double _minimalGap;*/
         private ObservableCollection<RadMenuItem> _menuItems = new ObservableCollection<RadMenuItem>();
-        private Canvas _circlesCanvas = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
+        /*private Canvas _circlesCanvas = new Canvas {Background = new SolidColorBrush(Colors.LightSteelBlue)};
         private ICommand _addNewCircleCommand;
         private readonly Random _random;
         private int _circlesCount;
@@ -50,12 +36,49 @@ namespace InscribedCircles.MainApp.ViewModels
         private bool _isCrossed;
         private double _positionX;
         private double _positionY;
+        private bool _calcCirclesAutomatically;*/
+        private ViewModel _calculateParametersContentViewModel;
+        private ViewModel _addCircleContentViewModel;
+        private ViewModel _circlesResultContentViewModel;
 
         #endregion
 
         #region Properties
 
-        public double PositionX
+        public ViewModel CalculateParametersContentViewModel
+        {
+            get { return _calculateParametersContentViewModel; }
+            set
+            {
+                if (Equals(_calculateParametersContentViewModel, value)) return;
+                _calculateParametersContentViewModel = value;
+                RaisePropertyChanged(() => CalculateParametersContentViewModel);
+            }
+        }
+
+        public ViewModel AddCircleContentViewModel
+        {
+            get { return _addCircleContentViewModel; }
+            set
+            {
+                if (Equals(_addCircleContentViewModel, value)) return;
+                _addCircleContentViewModel = value;
+                RaisePropertyChanged(() => AddCircleContentViewModel);
+            }
+        }
+
+        public ViewModel CirclesResultContentViewModel
+        {
+            get { return _circlesResultContentViewModel; }
+            set
+            {
+                if (Equals(_circlesResultContentViewModel, value)) return;
+                _circlesResultContentViewModel = value;
+                RaisePropertyChanged(() => CirclesResultContentViewModel);
+            }
+        }
+
+        /*public double PositionX
         {
             get { return _positionX; }
             set
@@ -202,6 +225,17 @@ namespace InscribedCircles.MainApp.ViewModels
             }
         }
 
+        public bool CalcCirclesAutomatically
+        {
+            get { return _calcCirclesAutomatically; }
+            set
+            {
+                if (Equals(_calcCirclesAutomatically, value)) return;
+                _calcCirclesAutomatically = value;
+                RaisePropertyChanged(() => CalcCirclesAutomatically);
+            }
+        }*/
+
         public ObservableCollection<RadMenuItem> MenuItems
         {
             get { return _menuItems; }
@@ -215,7 +249,7 @@ namespace InscribedCircles.MainApp.ViewModels
 
         #endregion
 
-        #region Commands
+        /*#region Commands
 
         public ICommand ClearCirclesCommand
         {
@@ -227,16 +261,12 @@ namespace InscribedCircles.MainApp.ViewModels
             get { return _addNewCircleCommand ?? (_addNewCircleCommand = new RelayCommand(AddNewCircle)); }
         }
 
-        public ICommand CalcCirclesCommand
-        {
-            get { return _calcCirclesCommand ?? (_calcCirclesCommand = new RelayCommand<MainWindow>(CalcCircles)); }
-        }
         public ICommand ShowCoordinatesCommand
         {
             get { return _showCoordinatesCommand ?? (_showCoordinatesCommand = new RelayCommand(ShowCoordinates)); }
         }
 
-        #endregion
+        #endregion*/
 
         #region Constructor
 
@@ -246,21 +276,23 @@ namespace InscribedCircles.MainApp.ViewModels
             radMenuItem.Items.Add(new RadMenuItem
             {
                 Header = "Налаштування",
-                Command = new RelayCommand(() => new SettingsWindow().ShowDialog())
+                Command = new RelayCommand(() => Container.Resolve<ISettingsWindow>().ShowDialog())
             });
-            radMenuItem.Items.Add(new RadMenuItem
+            /*radMenuItem.Items.Add(new RadMenuItem
             {
                 Header = "Вихід",
                 Command = new RelayCommand(() => Application.Current.Shutdown())
-            });
+            });*/
             MenuItems.Add(radMenuItem);
 
-            _random = new Random();
+            CalculateParametersContentViewModel = Container.Resolve<CalculateParametersViewModel>();
+            AddCircleContentViewModel = Container.Resolve<AddCircleViewModel>();
+            CirclesResultContentViewModel = Container.Resolve<CirclesResultViewModel>();
         }
 
         #endregion
 
-        #region Private Methods
+        /*#region Private Methods
 
         private void SetNewCircleMaxRadius()
         {
@@ -280,18 +312,13 @@ namespace InscribedCircles.MainApp.ViewModels
             CirclesCount = CirclesCanvas.Children.Count;
         }
 
-        private void CalcCircles(MainWindow window)
+        private void CalcCircles()
         {
             var hasErrors = ValidateValues();
             if (hasErrors) return;
 
-            double? widthValue = window.RectWidthUpDown.Value;
-            double? heightValue = window.RectHeightUpDown.Value;
-            double? circleRadiusValue = window.RectWidthUpDown.Value;
-            double? minimalGapValue = window.RectWidthUpDown.Value;
-
             ClearCircles();
-            var rectangleWithCircles = new InscribedCirclesService();
+            var rectangleWithCircles = new CircleService();
             var points =
                 rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
             if (points.Count() > _maxCircles)
@@ -368,7 +395,7 @@ namespace InscribedCircles.MainApp.ViewModels
             var x = mousePosition.X - _mouseOffsetX;
             var y = mousePosition.Y - _mouseOffsetY;
             /*PositionX = x;
-            PositionY = y;*/
+            PositionY = y;#1#
             if (_isCircleSelected)
             {
                 var ellipse = (Ellipse)sender;
@@ -437,6 +464,6 @@ namespace InscribedCircles.MainApp.ViewModels
             return true;
         }
 
-        #endregion
+        #endregion*/
     }
 }

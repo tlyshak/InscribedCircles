@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InscribedCircles.MainApp.Attributes
+namespace InscribedCircles.Abstraction.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class ViewModelAttribute : Attribute

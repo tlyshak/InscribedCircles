@@ -7,7 +7,6 @@ namespace InscribedCircles.Abstraction
     {
         public ViewModel()
         {
-            ContainerAccessor.Container = ContainerAccessor.Container ?? new UnityContainer();
             Container = ContainerAccessor.Container;
         }
 
