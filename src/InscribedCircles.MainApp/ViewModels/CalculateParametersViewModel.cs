@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Abstraction.Interfaces.ViewModels;
 using InscribedCircles.Core;
-using Microsoft.Practices.Unity;
+using Telerik.Windows.Controls;
 using Point = InscribedCircles.Core.Point;
 
 namespace InscribedCircles.MainApp.ViewModels
@@ -96,10 +96,9 @@ namespace InscribedCircles.MainApp.ViewModels
             if (hasErrors) return;
 
             var rectangleWithCircles = new CircleService();
-            Points =
-                rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
+            Points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
             if (Points.Count() > MaxCircles)
-                MessageBox.Show("Кількість кіл надто велика і може призвести до втрати швидкодії.\n" +
+                RadWindow.Alert("Кількість кіл надто велика і може призвести до втрати швидкодії.\n" +
                                 "Попробуйте змінити параметри.");
         }
 
@@ -109,7 +108,12 @@ namespace InscribedCircles.MainApp.ViewModels
                                (RectangleHeight <= 0 ? "Висота заготовки\n" : string.Empty) +
                                (CircleRadius <= 0 ? "Радіус кола\n" : string.Empty);
             if (errorMessage == string.Empty) return false;
-            MessageBox.Show(errorMessage + "\nНе може(можуть) бути 0", "Помилка вводу");
+            RadWindow.Alert(new DialogParameters
+            {
+                Header = "Помилка вводу",
+                Content = errorMessage + "\nНе може(можуть) бути 0",
+                DialogStartupLocation = WindowStartupLocation.CenterScreen
+            });
             return true;
         }
 

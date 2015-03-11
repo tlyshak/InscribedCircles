@@ -11,6 +11,7 @@ using InscribedCircles.Abstraction;
 using InscribedCircles.Abstraction.Interfaces.ViewModels;
 using InscribedCircles.MainApp.Windows;
 using Microsoft.Expression.Interactivity.Layout;
+using Telerik.Windows.Controls;
 using Point = InscribedCircles.Core.Point;
 
 namespace InscribedCircles.MainApp.ViewModels
@@ -139,7 +140,7 @@ namespace InscribedCircles.MainApp.ViewModels
             var point = FindFreeSpaceForCircle(addCircleViewModel.NewCircleRadius);
             if (point == null)
             {
-                MessageBox.Show("Немає вільного місця щоб вставити коло.");
+                RadWindow.Alert("Немає вільного місця щоб вставити коло.");
                 return;
             }
             AddCircle(point.X, point.Y, addCircleViewModel.NewCircleRadius);
