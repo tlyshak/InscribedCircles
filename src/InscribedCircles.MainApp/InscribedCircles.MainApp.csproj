@@ -78,7 +78,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
-    <Compile Include="Models\Circle.cs" />
     <Compile Include="ViewModels\AddCircleViewModel.cs" />
     <Compile Include="ViewModels\CalculateParametersViewModel.cs" />
     <Compile Include="ViewModels\CirclesResultViewModel.cs" />

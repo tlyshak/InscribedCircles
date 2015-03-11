@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using InscribedCircles.Abstraction;
 using InscribedCircles.Abstraction.Interfaces.ViewModels;
 using InscribedCircles.Core;
+using Microsoft.Practices.ObjectBuilder2;
+using Microsoft.Practices.Unity;
 using Telerik.Windows.Controls;
 using Point = InscribedCircles.Core.Point;
 
@@ -20,10 +23,15 @@ namespace InscribedCircles.MainApp.ViewModels
         private double _rectangleHeight;
         private bool _calcCirclesAutomatically;
         private double _circleRadius;
+        private IEnumerable<Point> _points = new List<Point>();
 
         #region Properties
 
-        public IEnumerable<Point> Points { get; set; }
+        public IEnumerable<Point> Points
+        {
+            get { return _points; }
+            set { _points = value; }
+        }
 
         public double CircleRadius
         {
@@ -96,10 +104,15 @@ namespace InscribedCircles.MainApp.ViewModels
             if (hasErrors) return;
 
             var rectangleWithCircles = new CircleService();
-            Points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
-            if (Points.Count() > MaxCircles)
+            var points = rectangleWithCircles.GetCirclesCenters(RectangleWidth, RectangleHeight, CircleRadius, MinimalGap);
+            if (points.Count() > MaxCircles)
                 RadWindow.Alert("Кількість кіл надто велика і може призвести до втрати швидкодії.\n" +
                                 "Попробуйте змінити параметри.");
+            else
+            {
+                Points = points;
+                Container.RegisterInstance(Points);
+            }
         }
 
         private bool ValidateValues()

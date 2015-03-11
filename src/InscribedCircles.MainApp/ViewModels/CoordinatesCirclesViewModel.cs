@@ -22,7 +22,9 @@ namespace InscribedCircles.MainApp.ViewModels
 
         public CoordinatesCirclesViewModel()
         {
-            //Points = Container.Resolve<IEnumerable<Point>>();
+            Points = Container.IsRegistered<IEnumerable<Point>>() 
+                ? Container.Resolve<IEnumerable<Point>>() 
+                : new List<Point>();
         }
     }
 }
